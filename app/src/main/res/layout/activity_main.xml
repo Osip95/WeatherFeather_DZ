@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".feature.weather_screen.ui.MainActivity">
 
+    <ProgressBar
+        android:id="@+id/progrses_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.457"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.273" />
+
     <TextView
         android:id="@+id/tvTemperature"
         android:layout_width="wrap_content"
@@ -18,60 +29,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.46" />
 
-    <Button
-        android:id="@+id/bt_get_temp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabWeatherFeathc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="GetTemperature"
-        android:textAllCaps="false"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_launcher_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.428"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTemperature"
-        app:layout_constraintVertical_bias="0.142" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <Button
-        android:id="@+id/bt_go_screen_wind"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="GoScreenWind"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.451"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_get_temp"
-        app:layout_constraintVertical_bias="0.0" />
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
-    <RadioGroup
-        android:id="@+id/radioGroupСities"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/tvTemperature"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
-
-
-        <RadioButton
-            android:id="@+id/rbMoscow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/moscow" />
-
-        <RadioButton
-            android:id="@+id/rbSaintPetersburg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/saint_petersburg" />
-
-        <RadioButton
-            android:id="@+id/rbOmsk"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/omsk" />
-    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

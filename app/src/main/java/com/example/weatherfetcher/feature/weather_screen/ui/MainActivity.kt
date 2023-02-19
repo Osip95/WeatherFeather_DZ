@@ -1,63 +1,36 @@
 package com.example.weatherfetcher.feature.weather_screen.ui
 
-import android.content.Intent
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
-import com.example.weatherfetcher.CITY
+import androidx.core.view.isVisible
 import com.example.weatherfetcher.R
-import com.example.weatherfetcher.feature.weather_screen.GetWeatherInteractor
-import com.example.weatherfetcher.feature.weather_screen.data.WeatherApiClient
-import com.example.weatherfetcher.feature.weather_screen.data.WeatherRemouteSource
-import com.example.weatherfetcher.feature.weather_screen.data.WeatherRepoImpl
-import com.example.weatherfetcher.feature.weather_screen.presentation.WeatherScreenPresenter
-import kotlinx.coroutines.*
+import com.example.weatherfetcher.feature.weather_screen.presentation.WeatherScreenViewModel
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var presenter: WeatherScreenPresenter
-
+    private val viewModel: WeatherScreenViewModel by viewModel()
+    val fabWeather: FloatingActionButton by lazy { findViewById(R.id.fabWeatherFeathc)}
+    val tvTemperature: TextView by lazy{ findViewById(R.id.tvTemperature) }
+    val progressBar: ProgressBar by lazy{ findViewById(R.id.progrses_bar)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-        val rgCity = findViewById<RadioGroup>(R.id.radioGroupСities)
-        val tvTemperature = findViewById<TextView>(R.id.tvTemperature)
-        val btnGetTemp = findViewById<Button>(R.id.bt_get_temp)
-        val btnGoWindScreen = findViewById<Button>(R.id.bt_go_screen_wind)
-        val errorHandler = CoroutineExceptionHandler { _, _ ->
-            Toast.makeText(this@MainActivity, "Произошла ошибка", Toast.LENGTH_LONG).show()
-        }
-        rgCity.setOnCheckedChangeListener { _, checkedId ->
-            findViewById<RadioButton>(checkedId)?.apply {
-                CITY = text.toString()
-            }
-        }
-        btnGetTemp.setOnClickListener {
-            if (CITY == "") {
-                Toast.makeText(this@MainActivity, "Выберите город", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
-            presenter = WeatherScreenPresenter(
-                GetWeatherInteractor(
-                    WeatherRepoImpl(
-                        WeatherRemouteSource(WeatherApiClient.getApi())
-                    )
-                )
-            )
-            CoroutineScope(Dispatchers.Main).launch(errorHandler) {
-                tvTemperature.text = presenter.getWeather().main.temperature
-            }
-
+// подписываемся на изменнеия в лайфдате, если изменниея есть то вызвать метод render()
+        viewModel.viewState.observe(this,::render)
+// при нажатии на кнопку, оповестить вью модель - событием UiEvent.OnButtonClicked
+        fabWeather.setOnClickListener{
+            viewModel.processUIEvent(UiEvent.OnButtonClicked)
         }
 
-        btnGoWindScreen.setOnClickListener {
-            CITY = ""
-            startActivity(Intent(this, WindActivity::class.java))
-        }
-
-
+    }
+// отобразить прогрес бар если данные еще не получены и в TextView отобразить полученные данне из лайфДаты
+    private fun render(viewState: ViewState){
+        progressBar.isVisible = viewState.isLoading
+        tvTemperature.text = "${viewState.title} ${viewState.temperature}"
     }
 }
